@@ -1,5 +1,6 @@
 import { TablePage } from "@kottster/react";
 import LocationEditor from "../../../components/LocationEditor";
+import FileUploader from "../../../components/FileUploader";
 
 export default () => (
   <TablePage
@@ -11,6 +12,16 @@ export default () => (
           type: "custom",
           renderComponent: (params) => {
             return <LocationEditor params={params} />;
+          },
+        },
+      }),
+      photo: (column) => ({
+        ...column,
+        label: "Photo",
+        fieldInput: {
+          type: "custom",
+          renderComponent: (params) => {
+            return <FileUploader params={params} />;
           },
         },
       }),
