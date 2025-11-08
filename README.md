@@ -129,4 +129,4 @@ For the CDN to work, all objects in the bucket must be public. Go to the S3 Buck
 
 ## Blog post
 
-This repo is for a blog post I wrote : TODO - url
+This repo is for a blog post I wrote : [https://dev.to/aaronblondeau/who-wants-to-build-an-admin-ui-part-2-custom-field-editors-4eob](https://dev.to/aaronblondeau/who-wants-to-build-an-admin-ui-part-2-custom-field-editors-4eob)
