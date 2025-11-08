@@ -32,6 +32,10 @@ pnpm dev
 
 ## Blog post
 
+TODO - cleanup photos on record delete (hook)
+
+pnpm add @aws-sdk/client-s3 @aws-sdk/lib-storage @aws-sdk/s3-request-presigner
+
 This repo is for a blog post I wrote : TODO - url
 
 1. Create a new kottster project
@@ -80,3 +84,26 @@ npx drizzle-kit push
 13. Note that location and photo are not exactly editable here...
 
 14. Create index.tsx in pages/sightings
+
+15. S3 Setup Instructions
+
+permissions -> CORS:
+
+```
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "PUT",
+            "POST"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": []
+    }
+]
+```
