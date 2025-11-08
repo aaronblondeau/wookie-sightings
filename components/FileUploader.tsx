@@ -10,6 +10,8 @@ export default function FileUploader({
   params: Parameters<NonNullable<CustomFieldInput["renderComponent"]>>[0];
 }) {
   const { value, record, updateFieldValue } = params;
+  console.log(params);
+
   const [file, setFile] = useState<File | null>(null);
   const [uploadWait, setUploadWait] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -39,8 +41,6 @@ export default function FileUploader({
       setUploadError("");
       setUploadWait(true);
       try {
-        console.log("~~ Would upload", file);
-
         // // Can't do this :-(
         // const result = await callProcedure("uploadFile", { file });
 
@@ -49,7 +49,7 @@ export default function FileUploader({
         // form.append("file", file);
         // const result = await callProcedure("uploadFile", form);
 
-        // base64 encoded does work, but we hit a payload size issue pretty quick...
+        // // base64 encoded does work, but we hit a payload size issue pretty quick...
         // const fileData = await new Promise((resolve, reject) => {
         //   const reader = new FileReader();
         //   reader.onloadend = () => {
@@ -109,9 +109,7 @@ export default function FileUploader({
 
       {uploadWait && <Loader color="blue" />}
 
-      {value && !uploadWait && photoUrl && (
-        <Image radius="md" h={200} src={photoUrl} />
-      )}
+      {!uploadWait && photoUrl && <Image radius="md" h={200} src={photoUrl} />}
 
       {uploadError && (
         <Alert

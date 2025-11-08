@@ -16,7 +16,7 @@ Create an .env file
 cp .env.example .env
 ```
 
-TODO - instructions for updating S3 env vars.
+Update each of the S3\_ env vars in .env. See info below for configuring your bucket and IAM user.
 
 Setup database (note DB_FILE_NAME in .env)
 
@@ -30,64 +30,62 @@ Run Kottster
 pnpm dev
 ```
 
-## Blog post
+Login with username : admin
+password : foobar
 
-TODO - cleanup photos on record delete (hook)
+These are stored in app/\_server/app.ts (Not sure that is a good idea..., but anywhooo)
 
-pnpm add @aws-sdk/client-s3 @aws-sdk/lib-storage @aws-sdk/s3-request-presigner
+## To use FileUploader or LocationEditor in your Kottster instance
 
-This repo is for a blog post I wrote : TODO - url
+1. If using FileUploader, create a /lib folder and copy S3Client.ts and fileUploadProcedures.ts. Update the code in the getFileUploadUrl method in fileUploadProcedures.ts to match your application.
 
-1. Create a new kottster project
+2. Create /components and copy FileUploader.tsx and/or LocationEditor.tsx. Update the code (updateFieldValue calls and record references) to match your column names.
 
-https://kottster.app/docs/
+3. Use the Kottster UI to create a table view page for your table(s)
 
-2. Install mantine (will need this later)
+4. For file uploads, copy pages/sightings/api.server.ts into your table's page folder. Copy pages/users/api.server.ts into your parent table's page folder (for nested editor support to work). Edit these fil
 
+5. Copy the index.tsx file from pages/users (nested example) and pages/sightings to setup UI editor components. You'll need to update the keys in columnOverrides and nested to match your table and column names.
+
+6. Install npm dependencies:
+
+```
 pnpm add @mantine/hooks @mantine/core
 pnpm add lucide-react
-
-3. Install drizzle (sqlite)
-
-pnpm add drizzle-orm @libsql/client dotenv
-pnpm add -D drizzle-kit tsx
-
-) Install leaflet (also needed later)
 
 pnpm add leaflet react-leaflet@next
 pnpm add -D @types/leaflet
 
-4. Create .env
+pnpm add @aws-sdk/client-s3 @aws-sdk/lib-storage @aws-sdk/s3-request-presigner
+```
 
-DB_FILE_NAME=file:wookie-sightings.db
+## S3 Bucket Configuration
 
-5. Create schema.ts (skip index.ts in drizzle instructions)
+**Important** : These steps configure a public bucket where everything it contains is accessible to all of the internet. Never put any secret files in a bucket configured this way.
 
-6. Create drizzle.config.ts
+1. Create an S3 bucket. Use all defaults except:
+   Block Public Access settings for this bucket : Uncheck and acknowledge
 
-7. Run drizzle push
+2. Create an IAM policy with this JSON (replacing YOURBUCKETNAME)
 
-npx drizzle-kit push
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::YOURBUCKETNAME*"
+        }
+    ]
+}
+```
 
-8. Launch kottster
+3. Create a user and "attach the policy directly". Then go to user's "Security credentials" tab.
+   Click access key, choose "Local code", and then confirm.
 
-9. Create username and password
-
-10. Connect to to db
-
-11. Add page for users
-
-- Create a user
-
-12. Add page for sightings
-
-13. Note that location and photo are not exactly editable here...
-
-14. Create index.tsx in pages/sightings
-
-15. S3 Setup Instructions
-
-permissions -> CORS:
+4. Setup CORS on the bucket so files can be uploaded directly from the Kottster admin UI. Go to the permissions -> CORS tab for the bucket and add the following JSON:
 
 ```
 [
@@ -107,3 +105,28 @@ permissions -> CORS:
     }
 ]
 ```
+
+5. Finally, you can also setup a CloudFront CDN for the bucket. To do so, choose the bucket as origin domain. Under "Web Application Firewall (WAF)", choose "Do not enable security protections" leave all other items default.
+
+For the CDN to work, all objects in the bucket must be public. Go to the S3 Bucket and paste the following for the bucket policy (from https://awspolicygen.s3.amazonaws.com/policygen.html) :
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement1",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::YOURBUCKETNAME/*"
+    }
+  ]
+}
+```
+
+## Blog post
+
+This repo is for a blog post I wrote : TODO - url
