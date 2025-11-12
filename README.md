@@ -1,4 +1,4 @@
-# wookie-sightings
+# bigfoot-sightings
 
 This is an example app which demonstrates how to add custom field editors to Kottster.
 

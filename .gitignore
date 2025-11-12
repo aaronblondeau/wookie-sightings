@@ -3,6 +3,6 @@ nbuild
 npm-debug.log
 .DS_Store
 .cache
-wookie-sightings.db
+bigfoot-sightings.db
 app.db
 .env

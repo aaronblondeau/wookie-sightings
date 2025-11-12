@@ -7,7 +7,7 @@ import knex from 'knex';
 const client = knex({
   client: 'better-sqlite3',
   connection: {
-    filename: './wookie-sightings.db',
+    filename: './bigfoot-sightings.db',
   }
 });
 
