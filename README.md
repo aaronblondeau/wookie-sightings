@@ -5,6 +5,7 @@ This is an example app which demonstrates how to add custom field editors to Kot
 ## Getting started
 
 Install dependencies
+git st
 
 ```
 pnpm install
